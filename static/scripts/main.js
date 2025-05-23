@@ -1,8 +1,10 @@
 import templates from "./templates.js";
-import "./auth.js"
+import "./auth.js";
 import "./utils.js";
+import { fetchData } from "./request.js";
+import req from "./request.js";
 
-window.loadPage = function (page, event) {
+window.loadPage = async function (page, event) {
     if (event) {
         event.preventDefault();
     }
@@ -13,11 +15,13 @@ window.loadPage = function (page, event) {
 
     switch (page) {
         case "home":
-            document.body.innerHTML = templates.background + templates.profilePage // templates.footer;
+            document.body.innerHTML = templates.background + templates.profilePage;
+            console.log(req);
+            await fetchData(req);
             appendHeader();
             break;
         case "auth":
-            document.body.innerHTML = templates.background + templates.loginPage //+ templates.footer;
+            document.body.innerHTML = templates.background + templates.loginPage; //+ templates.footer;
             break;
         default:
             break;
@@ -25,37 +29,44 @@ window.loadPage = function (page, event) {
     appendFooter();
 };
 
+check();
+
 function appendHeader() {
-  const header = document.createElement('header');
-  header.innerHTML = templates.header;
-  document.body.insertBefore(header, document.body.firstChild);
+    const header = document.createElement("header");
+    header.innerHTML = templates.header;
+    document.body.insertBefore(header, document.body.firstChild);
 }
 
-
- function appendFooter() {
-  const footer = document.createElement('footer');
-  footer.innerHTML = templates.footer;
-  document.body.appendChild(footer);
+function appendFooter() {
+    const footer = document.createElement("footer");
+    footer.innerHTML = templates.footer;
+    document.body.appendChild(footer);
 }
 
-
-if (!localStorage.getItem('auth.jwt')) {
-    loadPage("auth");
-} else {
-    loadPage("home");
-    checkAuth();
+function check() {
+    if (!localStorage.getItem("auth.jwt")) {
+        loadPage("auth");
+    } else {
+        loadPage("home");
+        checkAuth();
+    }
 }
+
+window.logout = function logout(event) {
+    event.preventDefault();
+
+    localStorage.removeItem("auth.jwt");
+    window.loadPage("auth");
+};
 
 window.showCredits = function showCredits() {
-    const creditsContainer = document.createElement('div');
-    creditsContainer.className = 'credits-container';
+    const creditsContainer = document.createElement("div");
+    creditsContainer.className = "credits-container";
     creditsContainer.innerHTML = templates.creditsPage;
 
     document.body.appendChild(creditsContainer);
 
-    creditsContainer.addEventListener('click', function () {
+    creditsContainer.addEventListener("click", function () {
         document.body.removeChild(creditsContainer);
     });
-}
-
-
+};

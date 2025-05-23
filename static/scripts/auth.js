@@ -1,5 +1,5 @@
-import  "./utils.js";
-import {showNotification} from "./utils.js";
+import "./utils.js";
+import { showNotification } from "./utils.js";
 window.login = async function login(event) {
     event.preventDefault();
 
@@ -55,7 +55,7 @@ window.checkAuth = async function checkAuth() {
             return Date.now() / 1000 > exp;
         } catch {
             return true;
-        } 
+        }
 
     } catch (error) {
         console.error("Token verification failed:", error);

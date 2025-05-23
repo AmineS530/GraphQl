@@ -52,10 +52,3 @@ export function showNotification(message, type = "success", sound = true) {
         }, 500);
     }, 1500);
 }
-
-window.logout = function logout(event) {
-    event.preventDefault();
-
-    localStorage.removeItem('auth.jwt');
-    window.location.reload();
-}
