@@ -15,9 +15,17 @@ window.loadPage = async function (page, event) {
 
     switch (page) {
         case "home":
-            document.body.innerHTML = templates.background + templates.profilePage;
-            console.log(req);
-            await fetchData(req);
+            fetchData(req)
+            .then(data => {
+              console.log("Fetched data:", data);
+              let dataOut = "";
+              for (let key in data.data.user[0]) {
+                dataOut += `<p><strong>${key}:</strong> ${data[key]}</p>`;
+              }              document.body.innerHTML = templates.background + templates.profilePage + dataOut + templates.footer + templates.header;
+            })
+            .catch(error => {
+              console.error("Error fetching data:", error);
+            });
             appendHeader();
             break;
         case "auth":
@@ -31,24 +39,14 @@ window.loadPage = async function (page, event) {
 
 check();
 
-function appendHeader() {
-    const header = document.createElement("header");
-    header.innerHTML = templates.header;
-    document.body.insertBefore(header, document.body.firstChild);
-}
 
-function appendFooter() {
-    const footer = document.createElement("footer");
-    footer.innerHTML = templates.footer;
-    document.body.appendChild(footer);
-}
 
 function check() {
     if (!localStorage.getItem("auth.jwt")) {
         loadPage("auth");
     } else {
         loadPage("home");
-        checkAuth();
+        // checkAuth();
     }
 }
 
@@ -56,7 +54,7 @@ window.logout = function logout(event) {
     event.preventDefault();
 
     localStorage.removeItem("auth.jwt");
-    window.loadPage("auth");
+    check();
 };
 
 window.showCredits = function showCredits() {
@@ -70,3 +68,15 @@ window.showCredits = function showCredits() {
         document.body.removeChild(creditsContainer);
     });
 };
+
+function appendHeader() {
+    const header = document.createElement("header");
+    header.innerHTML = templates.header;
+    document.body.insertBefore(header, document.body.firstChild);
+}
+
+function appendFooter() {
+    const footer = document.createElement("footer");
+    footer.innerHTML = templates.footer;
+    document.body.appendChild(footer);
+}
