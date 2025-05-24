@@ -2,8 +2,14 @@ html {
   color: #fff;
   font-family: monospace, serif;
   letter-spacing: 0.05em;
-  height: 100vmax;
+  height: 100%;
   background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
+  overflow: hidden;
+}
+
+body {
+  position: relative;
+  height: 100%;
   overflow: hidden;
 }
 
@@ -88,6 +94,7 @@ html {
 
 #title span {
   background: -webkit-linear-gradient(white, #38495a);
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -107,12 +114,6 @@ html {
 ::before {
   box-sizing: border-box;
 }
-
-/* .form body {
-    color: #fff;
-    font-family: monospace, serif;
-    letter-spacing: 0.05em;
-} */
 
 .form {
   width: 350px;

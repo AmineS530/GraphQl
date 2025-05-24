@@ -52,3 +52,21 @@ export function showNotification(message, type = "success", sound = true) {
         }, 500);
     }, 1500);
 }
+
+document.addEventListener("click", function (event) {
+    const btn = event.target.closest(".togglePwd");
+    if (!btn) return;
+
+    const input = btn.previousElementSibling;
+    const icon = btn.querySelector(".icon");
+
+    if (input && icon) {
+        if (input.type === "password") {
+            input.type = "text";
+            icon.innerText = "visibility_off";
+        } else {
+            input.type = "password";
+            icon.innerText = "visibility";
+        }
+    }
+});

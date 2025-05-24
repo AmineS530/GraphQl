@@ -70,17 +70,16 @@ const creditsPage = `
 
 
 const header = `
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <div class='header'>
-  <h1>Welcome to the Profile Page</h1>
-  <button class='btn' onclick='logout(event)'>Logout</button>
+  <h1>GraphQl</h1>
+  <button class='btn' onclick='logout(event)'>
+    <i class="fa-sharp fa-solid fa-right-from-bracket"></i>
+    Logout
+  </button>
 </div>
 `
-const footer = `
-<div class='footer'>
-  <p>GraphQl @asadik</p>
-  <button class='btn' onclick='showCredits()'>Credits</button>
-</div>
-`
+
 
 const profilePage = `
 <div class='profile'>
@@ -89,4 +88,4 @@ const profilePage = `
 </div>
 `
 
-export default { loginPage, background, creditsPage, profilePage, footer, header };
+export default { loginPage, background, creditsPage, profilePage, header };

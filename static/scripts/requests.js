@@ -71,28 +71,4 @@ const req = {
     `
 };
 
-
-async function fetchData(req) {
-    const authToken = localStorage.getItem('auth.jwt');
-    try {
-        const response = await fetch('https://learn.zone01oujda.ma/api/graphql-engine/v1/graphql', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${authToken.slice(1, -1)}`,
-            },
-            body: JSON.stringify(req),
-        });
-
-        if (!response.ok) throw new Error('Failed to fetch data.');
-
-        const data = await response.json();
-        console.log(data);
-        return data;
-    } catch (error) {
-        console.error('Error fetching data:', error);
-        return null;
-    }
-};
-export { fetchData };
-export default req
+export { req };

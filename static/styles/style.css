@@ -40,13 +40,14 @@
   z-index: 100;
 }
 
+.header button.btn i {
+  margin-right: 0px;
+}
+
 .header h1 {
   margin: 0;
   font-size: 24px;
   color: white;
-  flex: 1;
-  margin-left: 0;
-  margin-right: 0;
 }
 
 .profile {
@@ -57,11 +58,14 @@
   z-index: 101;
   cursor: pointer;
   position: absolute;
-  color: #565451;
+  background: -webkit-linear-gradient(white, #38495a);
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  -webkit-background-clip: text;
   right: 10px;
   top: 50%;
   transform: translateY(-50%);
-  font-size: 24px;
+  font-size: 0px;
 }
 
 

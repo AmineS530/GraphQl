@@ -1,12 +1,15 @@
-import "./utils.js";
-import { showNotification } from "./utils.js";
+import "../helpers/utils.js";
+import { APIS } from "../helpers/vars.js";
+import { showNotification } from "../helpers/utils.js";
+
+
+/* Login */
 window.login = async function login(event) {
     event.preventDefault();
 
     const emailOrUsername = document.querySelector("input[name='usernameOrEmail']").value.trim();
     const password = document.querySelector("input[name='password']").value;
 
-    // Validate inputs if needed
     await handleLogin(emailOrUsername, password);
 }
 
@@ -16,7 +19,7 @@ export async function handleLogin(emailOrUsername, password) {
         return;
     }
     try {
-        const response = await fetch('https://learn.zone01oujda.ma/api/auth/signin', {
+        const response = await fetch(APIS.SIGNIN, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -40,46 +43,49 @@ export async function handleLogin(emailOrUsername, password) {
     }
 }
 
-// verify jwt token
-
-window.checkAuth = async function checkAuth() {
-    const authToken = localStorage.getItem('auth.jwt');
-    if (!authToken) {
-        return false;
-    }
-
-    try {
-        try {
-            const exp = JSON.parse(atob(authToken.split('.')[1])).exp;
-            console.log("Token expiration time:", exp);
-            return Date.now() / 1000 > exp;
-        } catch {
-            return true;
-        }
-
-    } catch (error) {
-        console.error("Token verification failed:", error);
-        return false;
-    }
-
+// verify User Token
+function base64UrlToBase64(base64UrlString) {
+  let base64 = base64UrlString.replace(/-/g, "+").replace(/_/g, "/");
+  // Pad with '=' until length is a multiple of 4
+  while (base64.length % 4) {
+    base64 += "=";
+  }
+  return base64;
 }
 
-document.addEventListener("click", function (event) {
-    const btn = event.target.closest(".togglePwd");
-    if (!btn) return;
+function isValidJWT(token) {
+    if (!token) return false;
 
-    const input = btn.previousElementSibling;
-    const icon = btn.querySelector(".icon");
+    try {
+        const [, payloadBase64] = token.split(".");
+        const payloadJson = atob(payloadBase64);
+        const payload = JSON.parse(payloadJson);
 
-    if (input && icon) {
-        if (input.type === "password") {
-            input.type = "text";
-            icon.innerText = "visibility_off";
-            icon.style.color = "#fff";
+        // Check expiration
+        if (!payload.exp || payload.exp * 1000 <= Date.now()) {
+            return false;
+        }
+        // Check structure
+        if (!payload.sub || !payload["https://hasura.io/jwt/claims"]?.["x-hasura-user-id"]) {
+            return false;
+        }
+
+        return true;
+    } catch (err) {
+        localStorage.removeItem('auth.jwt');
+        return false;
+    }
+}
+
+export function checkAuth(authToken) {
+    if (authToken) {
+        if (isValidJWT(authToken)) {
+            return true;
         } else {
-            input.type = "password";
-            icon.innerText = "visibility";
-            icon.style.color = "#565451";
+            localStorage.removeItem('auth.jwt');
+            return false;
         }
     }
-});
+    return false;
+}
+
