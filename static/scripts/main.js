@@ -4,7 +4,7 @@ import "./helpers/utils.js";
 import { fetchData } from "./api/getdata.js";
 import { req } from "./requests.js";
 
-window.loadPage = async function (page, event) {
+export async function loadPage(page, event) {
     if (event) {
         event.preventDefault();
     }
@@ -12,15 +12,15 @@ window.loadPage = async function (page, event) {
     const Authenticated = checkAuth(authToken);
     const app = document.getElementById("app");
 
-  if (page === "auth" && Authenticated) {
-    loadPage("home");
-    return;
-  }
+    if (page === "auth" && Authenticated) {
+        loadPage("home", event);
+        return;
+    }
 
-  if (page === "home" && !Authenticated) {
-    localStorage.removeItem('auth.jwt');
-    return;
-  }
+    if (page === "home" && !Authenticated) {
+        localStorage.removeItem('auth.jwt');
+        return;
+    }
     switch (page) {
         case "home":
             fetchData(req, authToken)
@@ -29,7 +29,7 @@ window.loadPage = async function (page, event) {
                     let dataOut = "";
                     for (let key in data.data.user[0]) {
                         dataOut += `<p><strong>${key}:</strong> ${data[key]}</p>`;
-                    } app.innerHTML = templates.background + templates.profilePage + dataOut  //+templates.header ;
+                    } app.innerHTML = templates.profilePage + dataOut;
                 })
                 .catch(error => {
                     console.error("Error fetching data:", error);
@@ -37,7 +37,9 @@ window.loadPage = async function (page, event) {
             appendHeader();
             break;
         case "auth":
-            app.innerHTML = templates.background + templates.loginPage; //+ templates.footer;
+            if (app.innerHTML !== templates.loginPage) {
+                app.innerHTML = templates.loginPage;
+            }
             break;
         default:
             break;
@@ -57,6 +59,7 @@ function check() {
 window.logout = function logout(event) {
     event.preventDefault();
 
+    document.getElementById("app").innerHTML = "";
     localStorage.removeItem("auth.jwt");
     document.getElementById("header").innerHTML = "";
     check();

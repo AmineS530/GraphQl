@@ -10,7 +10,7 @@ export async function fetchData(req, authToken) {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                Authorization: `Bearer ${authToken.slice(1, -1)}`,
+                Authorization: `Bearer ${authToken}`,
             },
             body: JSON.stringify(req),
         });

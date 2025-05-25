@@ -1,7 +1,7 @@
 import "../helpers/utils.js";
 import { APIS } from "../helpers/vars.js";
 import { showNotification } from "../helpers/utils.js";
-
+import { loadPage } from "../main.js";
 
 /* Login */
 window.login = async function login(event) {
@@ -11,7 +11,8 @@ window.login = async function login(event) {
     const password = document.querySelector("input[name='password']").value;
 
     await handleLogin(emailOrUsername, password);
-}
+    loadPage("home", event);
+};
 
 export async function handleLogin(emailOrUsername, password) {
     if (!emailOrUsername || !password) {
@@ -36,40 +37,37 @@ export async function handleLogin(emailOrUsername, password) {
             throw new Error('No token received.');
         }
 
-        localStorage.setItem('auth.jwt', token);
-        window.location.reload();
+        localStorage.setItem('auth.jwt', token.slice(1, -1));
     } catch (error) {
         showNotification(error.message || "An error occurred during login.", "error");
     }
 }
 
-// verify User Token
-function base64UrlToBase64(base64UrlString) {
-  let base64 = base64UrlString.replace(/-/g, "+").replace(/_/g, "/");
-  // Pad with '=' until length is a multiple of 4
-  while (base64.length % 4) {
-    base64 += "=";
-  }
-  return base64;
-}
 
 function isValidJWT(token) {
     if (!token) return false;
 
     try {
-        const [, payloadBase64] = token.split(".");
+        const [headerBase64, payloadBase64] = token.split(".");
+
+        /*Check Header*/
+        const headerJson = atob(headerBase64);
+        const header = JSON.parse(headerJson);
+        if (header.typ !== "JWT" || header.alg !== "HS256") {
+            return false;
+        }
+
+        /*Check Payload*/
         const payloadJson = atob(payloadBase64);
         const payload = JSON.parse(payloadJson);
-
         // Check expiration
         if (!payload.exp || payload.exp * 1000 <= Date.now()) {
             return false;
         }
         // Check structure
-        if (!payload.sub || !payload["https://hasura.io/jwt/claims"]?.["x-hasura-user-id"]) {
+        if (!payload.sub || !payload.ip || !payload["https://hasura.io/jwt/claims"]?.["x-hasura-user-id"]) {
             return false;
         }
-
         return true;
     } catch (err) {
         localStorage.removeItem('auth.jwt');

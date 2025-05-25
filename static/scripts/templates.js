@@ -1,6 +1,4 @@
 const loginPage = `
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" /> 
-
 <form autocomplete='off' method="POST" class='form'>
  <div class="control">
   <img class="logo" src="static/images/logo.png" alt="Logo">
@@ -48,13 +46,6 @@ const loginPage = `
 </form>
 `
 
-const background = `
-<link href='https://fonts.googleapis.com/css?family=Lato:300,400,700' rel='stylesheet' type='text/css'>
-<div id='stars'></div>
-<div id='stars2'></div>
-<div id='stars3'></div>
-</div>
-`
 const creditsPage = `
 <div class='overlay'>
   <div class='credits'>
@@ -88,4 +79,4 @@ const profilePage = `
 </div>
 `
 
-export default { loginPage, background, creditsPage, profilePage, header };
+export default { loginPage, creditsPage, profilePage, header };
