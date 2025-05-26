@@ -26,10 +26,10 @@ export async function loadPage(page, event) {
             fetchData(req, authToken)
                 .then(data => {
                     console.log("Fetched data:", data);
-                    let dataOut = "";
+                    // let dataOut = "";
                     for (let key in data.data.user[0]) {
-                        dataOut += `<p><strong>${key}:</strong> ${data[key]}</p>`;
-                    } app.innerHTML = templates.profilePage + dataOut;
+                        // dataOut += `<p><strong>${key}:</strong> ${data[key]}</p>`;
+                    } app.innerHTML = templates.profilePage;
                 })
                 .catch(error => {
                     console.error("Error fetching data:", error);
@@ -62,6 +62,7 @@ window.logout = function logout(event) {
     document.getElementById("app").innerHTML = "";
     localStorage.removeItem("auth.jwt");
     document.getElementById("header").innerHTML = "";
+    document.body.style.overflow = "hidden";
     check();
 };
 
@@ -81,6 +82,7 @@ function appendHeader() {
     const header = document.getElementById("header")
     if (header.querySelector(".header")) return;
     header.innerHTML = templates.header;
+    document.body.style.overflow = "auto";
 }
 
 check();

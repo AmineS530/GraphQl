@@ -1,14 +1,81 @@
-/* Notificatons */
+/* Root Variables */
+:root {
+  --primary-red: #ff0000bd;
+  --primary-red-hover: #ff2a05;
+  --dark-bg: rgba(0, 0, 0, 0.7);
+  --darker-bg: rgba(0, 0, 0, 0.4);
+  --darkest-bg: rgba(10, 10, 10, 0.9);
+  --white: white;
+  --light-gray: #ccc;
+  --medium-gray: #888;
+  --dark-gray: #333;
+  --darker-gray: #222;
+  --darkest-gray: #1f1f1f;
+  --blue-accent: #3498db;
+  --blue-gradient-start: #5dade2;
+  --blue-gradient-end: #34495e;
+  --green-accent: limegreen;
+  --shadow-light: rgba(255, 255, 255, 0.1);
+  --shadow-dark: rgba(0, 0, 0, 0.5);
+  --border-light: rgba(255, 255, 255, 0.2);
+  --border-lighter: rgba(255, 255, 255, 0.1);
+  --backdrop-blur: blur(6px);
+  
+  /* Responsive variables */
+  --header-height: 60px;
+  --footer-height: 70px;
+  --container-padding: 5vh 4vw;
+  --section-padding: 20px;
+  --section-margin: 30px;
+}
+
+/* Base responsive setup */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  padding-top: var(--header-height);
+  padding-bottom: var(--footer-height);
+  min-height: 100vh;
+}
+
+/* Custom Scrollbar (works in Chrome, Edge, Safari) */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--blue-accent), #2c3e50);
+  border-radius: 5px;
+  box-shadow: inset 0 0 5px rgba(255, 255, 255, 0.3);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, var(--blue-gradient-start), var(--blue-gradient-end));
+}
+
+/* Notifications */
 .notification {
   position: fixed;
   top: -100px;
-  /* Start hidden above */
   left: 50%;
   transform: translateX(-50%);
   padding: 10px 20px;
   border-radius: 5px;
   font-weight: bold;
-  color: white;
+  color: var(--white);
   opacity: 0.9;
   transition: top 0.5s ease, opacity 0.5s ease;
   z-index: 1000;
@@ -26,14 +93,16 @@
   background-color: #45688d;
 }
 
+/* Header */
 .header {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
+  height: var(--header-height);
   padding: 10px 20px;
-  background: rgba(0, 0, 0, 0.7);
-  color: white;
+  background: var(--dark-bg);
+  color: var(--white);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -46,19 +115,21 @@
 
 .header h1 {
   margin: 0;
-  font-size: 24px;
-  color: white;
+  font-size: clamp(18px, 4vw, 24px);
+  color: var(--white);
 }
 
+/* Profile */
 .profile {
   padding: 20px;
 }
 
+/* Icon */
 .icon {
   z-index: 101;
   cursor: pointer;
   position: absolute;
-  background: -webkit-linear-gradient(white, #38495a);
+  background: -webkit-linear-gradient(var(--white), #38495a);
   -webkit-text-fill-color: transparent;
   background-clip: text;
   -webkit-background-clip: text;
@@ -68,40 +139,43 @@
   font-size: 0px;
 }
 
-
-
 /* Footer */
 .footer {
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
-  padding: 15px 40px;
-  background: rgba(0, 0, 0, 0.7);
-  backdrop-filter: blur(6px);
-  color: white;
+  height: var(--footer-height);
+  padding: 15px 20px;
+  background: var(--dark-bg);
+  backdrop-filter: var(--backdrop-blur);
+  color: var(--white);
   display: flex;
   justify-content: space-between;
   align-items: center;
   z-index: 100;
-  box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 -2px 4px var(--shadow-dark);
 }
 
 /* Shared Button Style */
 .btn {
-  padding: 8px 16px;
-  background-color: #ff0000bd;
+  padding: clamp(6px, 2vw, 8px) clamp(12px, 3vw, 16px);
+  background-color: var(--primary-red);
   cursor: pointer;
   border: rgba(68, 19, 19, 0.651);
   border-radius: 2px;
-  color: white;
-  cursor: pointer;
+  color: var(--white);
   font-weight: bold;
+  font-size: clamp(12px, 2.5vw, 14px);
   transition: background-color 0.3s ease;
+  min-height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .btn:hover {
-  background-color: #ff2a05;
+  background-color: var(--primary-red-hover);
 }
 
 /* Fullscreen dimmed background */
@@ -111,41 +185,29 @@
   left: 0;
   height: 100vh;
   width: 100vw;
-  background: rgba(0, 0, 0, 0.7);
-  /* Dim background */
+  background: var(--dark-bg);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
-  /* Above stars and main UI */
 }
 
 /* Centered credit box */
 .credits {
-  background: rgba(10, 10, 10, 0.9);
-  padding: 40px;
+  background: var(--darkest-bg);
+  padding: clamp(20px, 5vw, 40px);
   border-radius: 12px;
   text-align: center;
-  color: white;
+  color: var(--white);
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
-  max-width: 500px;
+  max-width: min(500px, 90vw);
   width: 90%;
   z-index: 1001;
+  margin: 20px;
 }
-
-.credits {
-  left: 0;
-  bottom: 0;
-  padding: 15px 15px;
-  width: 100%;
-  z-index: 100;
-  color: #fff;
-  text-decoration: none;
-}
-
 
 .credits h2 {
-  font-size: 28px;
+  font-size: clamp(20px, 5vw, 28px);
   margin-bottom: 20px;
 }
 
@@ -157,15 +219,129 @@
 
 .credits li {
   margin: 10px 0;
+  font-size: clamp(12px, 3vw, 16px);
 }
 
 .credits a {
-  color: #3498db;
+  color: var(--blue-accent);
   text-decoration: none;
   font-weight: bold;
   transition: color 0.3s ease;
+  word-break: break-word;
 }
 
 .credits a:hover {
   opacity: 0.8;
+}
+
+/* Profile Page Styles */
+.pp-container {
+  padding: var(--container-padding);
+  color: var(--white);
+  font-family: Arial, sans-serif;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Sections */
+.pp-section {
+  background: var(--darker-bg);
+  padding: var(--section-padding);
+  margin-bottom: var(--section-margin);
+  border-radius: 10px;
+  box-shadow: 0 0 8px var(--shadow-light);
+}
+
+/* Titles */
+.pp-title {
+  font-size: clamp(18px, 4vw, 24px);
+  margin-bottom: 15px;
+  text-align: left;
+  border-bottom: 1px solid var(--border-light);
+  padding-bottom: 5px;
+}
+
+/* Tables */
+.pp-table {
+  width: 100%;
+  border-collapse: collapse;
+  overflow-x: auto;
+  /* display: block; */
+  white-space: nowrap;
+}
+
+.pp-table td {
+  padding: clamp(8px, 2vw, 10px);
+  text-align: left;
+  border-bottom: 1px solid var(--border-lighter);
+  font-size: clamp(12px, 2.5vw, 14px);
+}
+
+.pp-table tr:last-child td {
+  border-bottom: none;
+}
+
+/* XP Progress bar */
+.pp-progress-bar {
+  background: var(--darker-gray);
+  padding: clamp(8px, 2vw, 10px);
+  margin-top: 10px;
+  border-radius: 5px;
+  text-align: center;
+  color: var(--light-gray);
+  box-shadow: inset 0 0 5px var(--shadow-light);
+}
+
+.pp-progress-label {
+  font-size: clamp(12px, 2.5vw, 14px);
+  margin-bottom: 4px;
+  color: var(--medium-gray);
+}
+
+/* Graphs */
+.pp-graph {
+  width: 100%;
+  height: auto;
+  background-color: var(--darkest-gray);
+  border-radius: 10px;
+  margin-top: 15px;
+  min-height: 200px;
+}
+
+/* Side-by-side layout */
+.pp-flex-row {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+/* Level box responsive */
+.pp-level-box {
+  flex: 0 0 auto;
+  min-width: 150px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Info box responsive */
+.pp-info-box {
+  flex: 1;
+  min-width: 250px;
+}
+
+/* XP Circle responsive */
+.pp-circle {
+  width: clamp(60px, 15vw, 80px);
+  height: clamp(60px, 15vw, 80px);
+  background-color: var(--dark-gray);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--green-accent);
+  font-size: clamp(1.2em, 4vw, 2em);
+  box-shadow: 0 0 10px rgba(0, 255, 0, 0.4);
+  margin: 0 auto;
 }
