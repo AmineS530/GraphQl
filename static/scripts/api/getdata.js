@@ -18,7 +18,6 @@ export async function fetchData(req, authToken) {
         if (!response.ok) throw new Error("Failed to fetch data.");
 
         const data = await response.json();
-        console.log(data);
         return data;
     } catch (error) {
         console.error("Error fetching data:", error);

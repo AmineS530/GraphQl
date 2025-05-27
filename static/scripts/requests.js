@@ -71,4 +71,39 @@ const req = {
     `
 };
 
-export { req };
+const basicInfo = {
+query:`
+{
+    user {
+        login
+        firstName
+        lastName
+        email
+        attrs(path:"tel")
+        campus
+    }
+    level: transaction(
+    where: {
+      _and: [
+        { type: { _eq: "level" } },
+        { event: { object: { name: { _eq: "Module" } } } }
+      ]
+    }
+   order_by: { amount: desc }
+    limit: 1
+  ) {
+    amount
+  }
+    xp: transaction_aggregate(
+            where: {_and: [{type: {_like: "xp"}}, {_or: [{originEventId: {_eq: 41}}, {path: {_ilike: "/oujda/module/checkpoint/%"}}, {path: {_ilike: "/oujda/module/piscine-js"}}]}]}
+          ) { 
+          aggregate {
+            sum {
+              amount
+            }
+          }
+        }
+}`
+};
+
+export { basicInfo };

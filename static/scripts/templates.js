@@ -64,9 +64,10 @@ const header = `
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <div class='header'>
   <h1>GraphQl</h1>
+  <h2 id='displayof_username'>${"Hello"}</h2>
   <button class='btn' onclick='logout(event)'>
-    <i class="fa-sharp fa-solid fa-right-from-bracket"></i>
     Logout
+    <i class="fa-sharp fa-solid fa-right-from-bracket"></i>
   </button>
 </div>
 `
@@ -80,7 +81,7 @@ const profilePage = `
       <h3 id="displayof_xp" class="pp-circle">0</h3>
       <div class="pp-progress-bar">
         <div class="pp-progress-label">XP amount</div>
-        <span id="displayof_progress_text">0%</span>
+        <span id="displayof_progress_text">0kb</span>
       </div>
     </div>
     
@@ -88,10 +89,10 @@ const profilePage = `
       <h2 class="pp-title">Basic Informations</h2>
       <table class="pp-table">
         <tbody>
-          <tr><td>Username</td><td id="displayof_username">N/A</td></tr>
+          <tr><td>Name</td><td id="displayof_name">N/A</td></tr>
           <tr><td>Email</td><td id="displayof_email">N/A</td></tr>
-          <tr><td>Created At</td><td id="displayof_createdAt">N/A</td></tr>
-          <tr><td>Last Login</td><td id="displayof_lastLogin">N/A</td></tr>
+          <tr><td>Phone Number</td><td id="displayof_tel">N/A</td></tr>
+          <tr><td>Campus</td><td id="displayof_campus">N/A</td></tr>
         </tbody>
       </table>
     </div>

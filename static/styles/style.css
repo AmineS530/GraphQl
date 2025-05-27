@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css?family=Raleway:300,300i,400,400i,500,500i,600,600i,700,700i,800,800i');
+
 /* Root Variables */
 :root {
   --primary-red: #ff0000bd;
@@ -20,7 +22,7 @@
   --border-light: rgba(255, 255, 255, 0.2);
   --border-lighter: rgba(255, 255, 255, 0.1);
   --backdrop-blur: blur(6px);
-  
+
   /* Responsive variables */
   --header-height: 60px;
   --footer-height: 70px;
@@ -64,33 +66,6 @@ body {
 
 ::-webkit-scrollbar-thumb:hover {
   background: linear-gradient(180deg, var(--blue-gradient-start), var(--blue-gradient-end));
-}
-
-/* Notifications */
-.notification {
-  position: fixed;
-  top: -100px;
-  left: 50%;
-  transform: translateX(-50%);
-  padding: 10px 20px;
-  border-radius: 5px;
-  font-weight: bold;
-  color: var(--white);
-  opacity: 0.9;
-  transition: top 0.5s ease, opacity 0.5s ease;
-  z-index: 1000;
-}
-
-.notification.success {
-  background-color: green;
-}
-
-.notification.error {
-  background-color: red;
-}
-
-.notification.info {
-  background-color: #45688d;
 }
 
 /* Header */
@@ -157,6 +132,17 @@ body {
   box-shadow: 0 -2px 4px var(--shadow-dark);
 }
 
+.footer a {
+  color: var(--blue-accent);
+  text-decoration: none;
+  font-weight: bold;
+  transition: color 0.3s ease;
+}
+
+.footer a:hover {
+  opacity: 0.8;
+}
+
 /* Shared Button Style */
 .btn {
   padding: clamp(6px, 2vw, 8px) clamp(12px, 3vw, 16px);
@@ -169,7 +155,7 @@ body {
   font-size: clamp(12px, 2.5vw, 14px);
   transition: background-color 0.3s ease;
   min-height: 32px;
-  display: inline-flex;
+  /* display: inline-flex; */
   align-items: center;
   justify-content: center;
 }
@@ -327,8 +313,19 @@ body {
 
 /* Info box responsive */
 .pp-info-box {
-  flex: 1;
-  min-width: 250px;
+  flex: 1 2;
+}
+
+@media screen and (max-width: 768px) {
+  .pp-info-box {
+    flex: 1 1 100%;
+    margin-bottom: 20px;
+  }
+  .pp-level-box {
+    flex: 1 1 100%;
+    margin-bottom: 20px;
+  }
+  
 }
 
 /* XP Circle responsive */
@@ -344,4 +341,115 @@ body {
   font-size: clamp(1.2em, 4vw, 2em);
   box-shadow: 0 0 10px rgba(0, 255, 0, 0.4);
   margin: 0 auto;
+}
+
+/* Toast Notifications */
+.toast {
+  position: fixed;
+  top: -200px;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: left;
+  padding: 15px 0;
+  background-color: var(--dark-bg);
+  border-radius: 4px;
+  max-width: min(500px, 90vw);
+  width: auto;
+  min-width: 45%;
+  box-shadow: 10px 7px 14px -5px rgba(81, 121, 233, 0.342);
+  transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  z-index: 1000;
+  opacity: 0;
+}
+
+.toast.show {
+  top: 55px;
+  opacity: 1;
+}
+
+.toast:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+}
+
+.toast__icon {
+  position: absolute;
+  top: 50%;
+  left: 22px;
+  transform: translateY(-50%);
+  width: 14px;
+  height: 14px;
+  padding: 7px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.toast__content {
+  padding-left: 70px;
+  padding-right: 60px;
+}
+
+.toast__type {
+  color: #3e3e3e;
+  font-weight: 700;
+  margin: 0 0 8px 0;
+  font-size: clamp(14px, 3vw, 16px);
+  font-family: 'Raleway', var(--white);
+}
+
+.toast__message {
+  font-size: clamp(12px, 2.5vw, 14px);
+  margin: 0;
+  color: #bdbdbd;
+  font-family: 'Raleway', var(--white);
+  line-height: 1.4;
+}
+
+.toast__svg {
+  fill: #fff;
+}
+
+/* Success Toast */
+.toast--success .toast__icon {
+  background-color: #2BDE3F;
+}
+
+.toast--success:before {
+  background-color: #2BDE3F;
+}
+
+/* Error Toast */
+.toast--error .toast__icon {
+  background-color: var(--primary-red);
+}
+
+.toast--error:before {
+  background-color: #FF4444;
+}
+
+@media (max-width: 768px) {
+  .toast {
+    max-width: 95vw;
+    min-width: 280px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .toast__content {
+    padding-left: 60px;
+    padding-right: 50px;
+  }
+
+  .toast__icon {
+    left: 18px;
+    width: 12px;
+    height: 12px;
+    padding: 6px;
+  }
 }

@@ -13,20 +13,50 @@ function playSound(name) {
     }
 }
 
-export function showNotification(message, type = "success", sound = true) {
+export function showNotification(message, type = "success", sound = true, duration = 3000) {
     if (notificationCooldown) return;
 
     notificationCooldown = true;
 
-    const notification = document.createElement("div");
-    notification.className = `notification ${type}`;
-    notification.textContent = message;
+    // Create toast container
+    const toast = document.createElement("div");
+    toast.className = `toast toast--${type}`;
 
-    document.body.appendChild(notification);
+    // Get appropriate icon and title based on type
+    const toastConfig = {
+        success: {
+            title: "Success!",
+            icon: `<svg class="toast__svg" viewBox="0 0 24 24">
+                     <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                   </svg>`
+        },
+        error: {
+            title: "Error!",
+            icon: `<svg class="toast__svg" viewBox="0 0 24 24">
+                     <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                   </svg>`
+        }
+    };
 
-    // Slide down
+    const config = toastConfig[type] || toastConfig.info;
+
+    // Create toast HTML structure
+    toast.innerHTML = `
+        <div class="toast__icon">
+            ${config.icon}
+        </div>
+        <div class="toast__content">
+            <p class="toast__type">${config.title}</p>
+            <p class="toast__message">${message}</p>
+        </div>
+    `;
+
+    // Add to DOM
+    document.body.appendChild(toast);
+
+    // Show toast with animation
     requestAnimationFrame(() => {
-        notification.style.top = "40px";
+        toast.classList.add('show');
     });
 
     // Play sound
@@ -38,19 +68,36 @@ export function showNotification(message, type = "success", sound = true) {
         }
     }
 
-    setTimeout(() => {
-        notification.style.top = "-100px";
-        notification.style.opacity = "0";
+    // Auto-hide after duration
+    const hideTimeout = setTimeout(() => {
+        hideToast(toast);
+    }, duration);
 
-        notification.addEventListener("transitionend", () => {
-            notification.remove();
+    // Store timeout reference to clear if manually closed
+    toast._hideTimeout = hideTimeout;
+
+    function hideToast(toastElement) {
+        // Clear timeout if it exists
+        if (toastElement._hideTimeout) {
+            clearTimeout(toastElement._hideTimeout);
+        }
+
+        // Remove show class to trigger exit animation
+        toastElement.classList.remove('show');
+        toastElement.style.top = '-200px';
+
+        // Remove element after animation completes
+        toastElement.addEventListener('transitionend', () => {
+            if (toastElement.parentNode) {
+                toastElement.remove();
+            }
         }, { once: true });
 
-        // Reset cooldown after animation finishes
+        // Reset cooldown after animation
         setTimeout(() => {
             notificationCooldown = false;
         }, 500);
-    }, 1500);
+    }
 }
 
 document.addEventListener("click", function (event) {

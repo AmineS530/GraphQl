@@ -12,6 +12,7 @@ window.login = async function login(event) {
 
     await handleLogin(emailOrUsername, password);
     loadPage("home", event);
+    showNotification("Login successful!", "success", 2000);
 };
 
 export async function handleLogin(emailOrUsername, password) {
