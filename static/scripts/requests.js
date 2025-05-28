@@ -1,33 +1,6 @@
 const req = {
     query: `
     {
-        user {
-            id
-            login
-            firstName
-            lastName
-            email
-            campus
-            auditRatio
-            totalUp
-            totalDown
-            xpTotal: transactions_aggregate(
-                where: { eventId: { _eq: 41 }, type: { _eq: "xp" } }
-            ) {
-                aggregate {
-                    sum {
-                        amount
-                    }
-                }
-            }
-            xp: transactions(
-                order_by: { createdAt: asc },
-                where: { eventId: { _eq: 41 }, type: { _eq: "xp" } }
-            ) {
-                createdAt
-                amount
-                path
-            }
             finished_projects: groups(
                 where: { group: { status: { _eq: finished } } }
             ) {
@@ -102,6 +75,25 @@ query:`
               amount
             }
           }
+        }
+    projects:  user {
+            transactions(
+                where: {type: {_eq: "xp"}, event: {object: {name: {_eq: "Module"}}}}
+                order_by: {createdAt: desc}
+            ) {
+            object {
+                name
+                progresses {
+                    group {
+                        members {
+                            userLogin
+                        }
+                    }
+                }
+            }
+            amount
+            createdAt
+            }
         }
 }`
 };
