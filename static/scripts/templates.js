@@ -73,7 +73,7 @@ const header = `
 const profilePage = `
 <div class="pp-container">
     <div class="pp-flex-row">
-        <div class="pp-section pp-level-box">
+        <div class="pp-section pp-box">
             <h2 class="pp-title">Current Level</h2>
             <h3 id="displayof_xp" class="pp-circle">0</h3>
             <div class="pp-progress-bar">
@@ -125,8 +125,18 @@ const profilePage = `
             <a href="#" id="showMoreLink" style="display: none">Show More...</a>
         </div>
     </div>
-
-    <div class="pp-section">
+    <div class="pp-flex-row">
+    <div class="pp-section pp-box">
+            <h2 class="pp-title">Audits Statistics</h2>
+            <svg id="pieChart" width="250" viewBox="0 10 300 250">
+              <g id="pieSlices"></g>
+            </svg>
+            <!-- <div class="pp-progress-bar">
+                <div class="pp-progress-label">Key</div>
+                <span> </span>
+            </div> -->
+        </div>
+    <div class="pp-section pp-info-box">
         <h2 class="pp-title">Audit Statistics</h2>
         <table class="pp-table">
             <tbody>
@@ -139,17 +149,21 @@ const profilePage = `
                     <td id="displayof_audit_total">0</td>
                 </tr>
                 <tr>
-                    <td>Success Rate</td>
+                    <td>Succeeded audits</td>
                     <td id="displayof_audit_successRate" style="color: green">0 %</td>
                 </tr>
                 <tr>
-                    <td>Fail Rate</td>
+                    <td>Failed audits</td>
                     <td id="displayof_audit_failRate" style="color: red">0 %</td>
                 </tr>
-            </tbody>
-        </table>
-    </div>
+                </tbody>
+                </table>
+                <svg  id="auditLineGraph" width="600px" height="50">
+          <!-- lines will be inserted here -->
+            </svg>
 
+    </div>
+  </div>
     <div class="pp-section">
         <h2 class="pp-title">Module</h2>
         <h3 id="displayof_module_time"></h3>

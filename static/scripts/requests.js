@@ -44,7 +44,7 @@ const req = {
     `
 };
 
-const basicInfo = {
+const Info = {
 query:`
 {
     user {
@@ -54,6 +54,18 @@ query:`
         email
         attrs(path:"tel")
         campus
+        totalUp
+        totalDown
+        totalUpBonus
+        auditRatio
+    audits_succeeded: audits_aggregate(where: {closureType: {_eq: succeeded}}) {
+      aggregate {
+        count
+      }
+    }
+    audits_failed: audits_aggregate(where: {closureType: {_eq: failed}}) {
+      aggregate {count}
+    }    
     }
     level: transaction(
     where: {
@@ -98,4 +110,4 @@ query:`
 }`
 };
 
-export { basicInfo };
+export { Info };
