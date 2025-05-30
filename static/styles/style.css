@@ -495,7 +495,15 @@ html {
 
 /* Medium screens (tablets) */
 @media (max-width: 992px) {
+ .pp-info-box {
+    flex: 1 1 100%;
+    margin-bottom: 20px;
+  }
 
+  .pp-box {
+    flex: 1 1 100%;
+    margin-bottom: 20px;
+  }
   .pp-table th:nth-child(1),
   .pp-table td:nth-child(1) {
     width: 25%;
@@ -588,7 +596,6 @@ html {
 /* Extra small screens (phones) */
 @media (max-width: 576px) {
   .pp-table {
-    display: block;
     overflow-x: auto;
     white-space: nowrap;
   }
@@ -628,4 +635,43 @@ html {
     padding: 6px 4px;
     font-size: 0.85rem;
   }
+}
+.audit-graph-wrapper {
+  width: 100%;
+  max-width: 600px;
+  height: 70px;
+  padding: 1rem;
+  margin: 0 auto;
+}
+
+#auditLineGraph {
+ width: 100%;
+  max-width: 400px;
+  height: 60px;
+  display: block;
+  margin: 0 auto;
+}
+
+.pie-legend {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  font-family: monospace;
+  font-size: 14px;
+  color: #ddd;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+}
+
+.legend-color {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  margin-right: 8px;
+  border: 1px solid #444;
 }

@@ -101,7 +101,7 @@ function bindFields(obj, fieldMap) {
     for (const [key, id] of Object.entries(fieldMap)) {
         var value = key.split(".").reduce((o, k) => o?.[k], obj);
         const el = document.getElementById(id);
-        console.log(key, value);
+        // console.log(key, value);
 
         if (id === 'displayof_audit_ratio') {
             value = value.toFixed(2)
@@ -142,10 +142,10 @@ async function placeData() {
             user.audits_failed.aggregate.count;
         Projects = projects;
         await renderTransactions(data.data.projects[0]);
-        updatePieChart([user.audits_succeeded.aggregate.count , user.audits_failed.aggregate.count], {
+        updatePieChart([user.audits_succeeded.aggregate.count, user.audits_failed.aggregate.count], {
             colors: ['#809c13', '#ff0000']
         });
-        // drawAuditLineGraph();
+        drawRatioLineGraph(user.totalUp + user.totalUpBonus, user.totalDown);
 
     } catch (error) {
         showNotification(
@@ -166,19 +166,19 @@ async function renderTransactions(projectData) {
     allTransactions = transactions.map((tx) => ({
         name: tx.object?.name ?? "Unknown",
         date: tx.createdAt ?? "N/A",
-        xp: tx.amount ?? 0,
+        xp: tx.amount > 0 ? `${tx.amount / 1000}Kb` : "--" ?? 0,
         members:
             tx.object?.progresses?.[0]?.group?.members
                 ?.map((m) => m.userLogin || m.login || m.username)
                 .filter(Boolean)
                 .join(", ") || "N/A",
-        type: tx.object?.type ?? ((tx.amount < 1000 && tx.amount > 0) ? "Exam exercice" : tx.amount > 1000 ? "Project" : "N/A"),
+        type: tx.object?.type ?? ((tx.amount < 1000 && tx.amount > 0) ? "Exam exercice" : tx.amount > 1000 ? "Project" : "Returned Project"),
     }));
     // Apply sorting if enabled
     if (sortState.key) {
         allTransactions.sort((a, b) => {
             if (sortState.key === "xp") {
-                return (a.xp - b.xp) * sortState.direction;
+                return (a.xp.slice(0, -2) - b.xp.slice(0, -2)) * sortState.direction;
             }
             const aVal = a[sortState.key]?.toString().toLowerCase();
             const bVal = b[sortState.key]?.toString().toLowerCase();
@@ -191,26 +191,6 @@ async function renderTransactions(projectData) {
     }
     displayVisibleItems();
 }
-
-document.querySelectorAll("[data-sort]").forEach((th) => {
-    th.style.cursor = "pointer";
-    th.addEventListener("click", () => {
-        const key = th.dataset.sort;
-        if (sortState.key === key) {
-            sortState.direction *= -1;
-        } else {
-            sortState.key = key;
-            sortState.direction = 1;
-        }
-        renderTransactions(Projects);
-    });
-});
-
-document.getElementById("showMoreLink").addEventListener("click", async (e) => {
-    e.preventDefault();
-    visibleCount += 5;
-    await displayVisibleItems();
-});
 
 async function displayVisibleItems() {
     const container = document.getElementById("displayof_last_transactions");
@@ -238,7 +218,27 @@ async function displayVisibleItems() {
     } else {
         showMoreLink.style.display = "none";
     }
+    document.getElementById("showMoreLink").addEventListener("click", async (e) => {
+        e.preventDefault();
+        visibleCount += 5;
+        await displayVisibleItems();
+    });
 }
+
+document.querySelectorAll("[data-sort]").forEach((th) => {
+    th.style.cursor = "pointer";
+    th.addEventListener("click", () => {
+        const key = th.dataset.sort;
+        if (sortState.key === key) {
+            sortState.direction *= -1;
+        } else {
+            sortState.key = key;
+            sortState.direction = 1;
+        }
+        renderTransactions(Projects);
+    });
+});
+
 
 function updatePieChart(values, options = {}) {
     const total = values.reduce((a, b) => a + b, 0);
@@ -250,12 +250,16 @@ function updatePieChart(values, options = {}) {
     const svgNS = "http://www.w3.org/2000/svg";
     const pieGroup = document.getElementById("pieSlices");
     pieGroup.innerHTML = '';
-
+    const legendContainer = document.getElementById("pieLegend");
+    legendContainer.innerHTML = ''; // Clear old legend
     let startAngle = 0;
 
     values.forEach((value, index) => {
         const sliceAngle = (value / total) * 2 * Math.PI;
         const endAngle = startAngle + sliceAngle;
+        const color = colors[index % colors.length];
+        const percentage = ((value / total) * 100).toFixed(1);
+        const label = index === 0 ? "Succeeded Audits" : `Failed Audits`;
 
         const x0 = center[0] + outerRadius * Math.cos(startAngle);
         const y0 = center[1] + outerRadius * Math.sin(startAngle);
@@ -301,31 +305,35 @@ function updatePieChart(values, options = {}) {
         text.setAttribute('fill', '#000000');
         text.setAttribute('font-size', '14');
         text.textContent = `${((value / total) * 100).toFixed(1)}%`;
-
+        const item = document.createElement('div');
+        item.className = 'legend-item';
+        item.innerHTML = `
+    <span class="legend-color" style="background: ${color}"></span>
+    <span class="legend-label">${label} — ${percentage}%</span>
+  `;
+        legendContainer.appendChild(item);
         pieGroup.appendChild(text);
 
         startAngle = endAngle;
     });
 }
 
-function drawAuditLineGraph() {
-    const successText = document.getElementById('displayof_audit_successRate').textContent;
-    const failText = document.getElementById('displayof_audit_failRate').textContent;
 
-    const success = parseFloat(successText);
-    const fail = parseFloat(failText);
-
+function drawRatioLineGraph(totalUp, totalDown) {
     const svg = document.getElementById('auditLineGraph');
-    svg.innerHTML = ''; // Clear old lines
+    svg.innerHTML = '';
 
-    const totalWidth = 280;
+    const svgNS = 'http://www.w3.org/2000/svg';
+    const totalWidth = 400;
     const xStart = 10;
-    const y = 30;
+    const y = 30; // line position
+
+    const total = totalUp + totalDown;
+    const success = ((totalUp / total) * 100).toFixed(1);
+    const fail = ((totalDown / total) * 100).toFixed(1);
 
     const successWidth = (success / 100) * totalWidth;
     const failWidth = (fail / 100) * totalWidth;
-
-    const svgNS = 'http://www.w3.org/2000/svg';
 
     // Success line
     const successLine = document.createElementNS(svgNS, 'line');
@@ -333,7 +341,7 @@ function drawAuditLineGraph() {
     successLine.setAttribute('y1', y);
     successLine.setAttribute('x2', xStart + successWidth);
     successLine.setAttribute('y2', y);
-    successLine.setAttribute('stroke', 'green');
+    successLine.setAttribute('stroke', 'limegreen');
     successLine.setAttribute('stroke-width', 12);
     svg.appendChild(successLine);
 
@@ -343,16 +351,27 @@ function drawAuditLineGraph() {
     failLine.setAttribute('y1', y);
     failLine.setAttribute('x2', xStart + successWidth + failWidth);
     failLine.setAttribute('y2', y);
-    failLine.setAttribute('stroke', 'red');
+    failLine.setAttribute('stroke', 'crimson');
     failLine.setAttribute('stroke-width', 12);
     svg.appendChild(failLine);
 
-    // Optional: add text on the bar
-    const text = document.createElementNS(svgNS, 'text');
-    text.setAttribute('x', totalWidth / 2);
-    text.setAttribute('y', y - 10);
-    text.setAttribute('text-anchor', 'middle');
-    text.setAttribute('fill', '#333');
-    text.textContent = `Success: ${success}% | Fail: ${fail}%`;
-    svg.appendChild(text);
+    // Line 1 (above the bar) – XP summary
+    const topText = document.createElementNS(svgNS, 'text');
+    topText.setAttribute('x', totalWidth / 2);
+    topText.setAttribute('y', y - 15); // above the graph
+    topText.setAttribute('text-anchor', 'middle');
+    topText.setAttribute('fill', '#00ccff'); // cyan-like
+    topText.setAttribute('font-size', '12');
+    topText.textContent = `Audit XP gained: ${success}% | Audit XP lost: ${fail}%`;
+    svg.appendChild(topText);
+
+    // Line 2 (below the bar) – Ratio info
+    const bottomText = document.createElementNS(svgNS, 'text');
+    bottomText.setAttribute('x', totalWidth / 2);
+    bottomText.setAttribute('y', y + 25); // below the graph
+    bottomText.setAttribute('text-anchor', 'middle');
+    bottomText.setAttribute('fill', '#f2c94c'); // gold-ish
+    bottomText.setAttribute('font-size', '12');
+    bottomText.textContent = totalUp > totalDown ? `Already at 1+ Ratio, Keep it up!` : `Need ${((totalDown - totalUp) / 1000).toFixed(0)}kB to reach 1.0 Ratio`;
+    svg.appendChild(bottomText);
 }

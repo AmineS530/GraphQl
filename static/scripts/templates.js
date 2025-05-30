@@ -127,14 +127,12 @@ const profilePage = `
     </div>
     <div class="pp-flex-row">
     <div class="pp-section pp-box">
-            <h2 class="pp-title">Audits Statistics</h2>
+            <h2 class="pp-title">Audit Validation Rate</h2>
             <svg id="pieChart" width="250" viewBox="0 10 300 250">
               <g id="pieSlices"></g>
             </svg>
-            <!-- <div class="pp-progress-bar">
-                <div class="pp-progress-label">Key</div>
-                <span> </span>
-            </div> -->
+            <div id="pieLegend" class="pie-legend"></div>
+
         </div>
     <div class="pp-section pp-info-box">
         <h2 class="pp-title">Audit Statistics</h2>
@@ -158,9 +156,10 @@ const profilePage = `
                 </tr>
                 </tbody>
                 </table>
-                <svg  id="auditLineGraph" width="600px" height="50">
-          <!-- lines will be inserted here -->
-            </svg>
+     <div class="audit-graph-wrapper">
+  <svg id="auditLineGraph">...</svg>
+</div>
+
 
     </div>
   </div>
