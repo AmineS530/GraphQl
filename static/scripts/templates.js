@@ -63,10 +63,16 @@ const header = `
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <div class='header'>
   <h1>GraphQl</h1>
-  <button class='btn' onclick='logout(event)'>
+ <div class="button hover1" onclick="logout(event)">
+  <svg xmlns="http://www.w3.org/2000/svg">
+    <rect class="shape" height="100%" width="100%"></rect>
+  </svg>
+  <div class="content">
     Logout
-    <i class="fa-sharp fa-solid fa-right-from-bracket"></i>
-  </button>
+    <i class="fa-sharp fa-solid fa-right-from-bracket" style="margin-left: 6px;"></i>
+  </div>
+</div>
+
 </div>
 `;
 
@@ -140,19 +146,19 @@ const profilePage = `
             <tbody>
                 <tr>
                     <td>Audit Ratio</td>
-                    <td id="displayof_audit_ratio">0</td>
+                    <td id="displayof_audit_ratio" style="color: #2F6690; font-weight: bold">0</td>
                 </tr>
                 <tr>
                     <td>Total Audits</td>
-                    <td id="displayof_audit_total">0</td>
+                    <td id="displayof_audit_total"style="font-weight: bold">0</td>
                 </tr>
                 <tr>
                     <td>Succeeded audits</td>
-                    <td id="displayof_audit_successRate" style="color: green">0 %</td>
+                    <td id="displayof_audit_successRate" style="color: #48CAE4;font-weight: bold">0 %</td>
                 </tr>
                 <tr>
                     <td>Failed audits</td>
-                    <td id="displayof_audit_failRate" style="color: red">0 %</td>
+                    <td id="displayof_audit_failRate" style="color: #0077B6;font-weight: bold">0 %</td>
                 </tr>
                 </tbody>
                 </table>

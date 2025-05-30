@@ -142,8 +142,9 @@ async function placeData() {
             user.audits_failed.aggregate.count;
         Projects = projects;
         await renderTransactions(data.data.projects[0]);
+        initSort();
         updatePieChart([user.audits_succeeded.aggregate.count, user.audits_failed.aggregate.count], {
-            colors: ['#809c13', '#ff0000']
+            colors: ['#48CAE4', '#0077B6']
         });
         drawRatioLineGraph(user.totalUp + user.totalUpBonus, user.totalDown);
 
@@ -224,21 +225,21 @@ async function displayVisibleItems() {
         await displayVisibleItems();
     });
 }
-
-document.querySelectorAll("[data-sort]").forEach((th) => {
-    th.style.cursor = "pointer";
-    th.addEventListener("click", () => {
-        const key = th.dataset.sort;
-        if (sortState.key === key) {
-            sortState.direction *= -1;
-        } else {
-            sortState.key = key;
-            sortState.direction = 1;
-        }
-        renderTransactions(Projects);
+function initSort() {
+    document.querySelectorAll("[data-sort]").forEach((th) => {
+        th.style.cursor = "pointer";
+        th.addEventListener("click", () => {
+            const key = th.dataset.sort;
+            if (sortState.key === key) {
+                sortState.direction *= -1;
+            } else {
+                sortState.key = key;
+                sortState.direction = 1;
+            }
+            renderTransactions(Projects);
+        });
     });
-});
-
+}
 
 function updatePieChart(values, options = {}) {
     const total = values.reduce((a, b) => a + b, 0);
@@ -341,7 +342,7 @@ function drawRatioLineGraph(totalUp, totalDown) {
     successLine.setAttribute('y1', y);
     successLine.setAttribute('x2', xStart + successWidth);
     successLine.setAttribute('y2', y);
-    successLine.setAttribute('stroke', 'limegreen');
+    successLine.setAttribute('stroke', '#48CAE4');
     successLine.setAttribute('stroke-width', 12);
     svg.appendChild(successLine);
 
@@ -351,7 +352,7 @@ function drawRatioLineGraph(totalUp, totalDown) {
     failLine.setAttribute('y1', y);
     failLine.setAttribute('x2', xStart + successWidth + failWidth);
     failLine.setAttribute('y2', y);
-    failLine.setAttribute('stroke', 'crimson');
+    failLine.setAttribute('stroke', '#0077B6');
     failLine.setAttribute('stroke-width', 12);
     svg.appendChild(failLine);
 
@@ -370,7 +371,7 @@ function drawRatioLineGraph(totalUp, totalDown) {
     bottomText.setAttribute('x', totalWidth / 2);
     bottomText.setAttribute('y', y + 25); // below the graph
     bottomText.setAttribute('text-anchor', 'middle');
-    bottomText.setAttribute('fill', '#f2c94c'); // gold-ish
+    bottomText.setAttribute('fill', '#90E0EF'); // gold-ish
     bottomText.setAttribute('font-size', '12');
     bottomText.textContent = totalUp > totalDown ? `Already at 1+ Ratio, Keep it up!` : `Need ${((totalDown - totalUp) / 1000).toFixed(0)}kB to reach 1.0 Ratio`;
     svg.appendChild(bottomText);

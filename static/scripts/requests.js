@@ -45,7 +45,7 @@ const req = {
 };
 
 const Info = {
-query:`
+    query: `
 {
     user {
         login
@@ -107,6 +107,16 @@ query:`
             createdAt
             }
         }
+    skills:   user {
+    skills :transactions(
+      where: { type: { _nin: ["xp", "level", "up", "down"] } }
+      distinct_on: type
+      order_by: {type: asc, amount: desc}
+    ) {
+      name:type
+      level:amount
+    }
+  }
 }`
 };
 
