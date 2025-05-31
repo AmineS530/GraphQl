@@ -120,8 +120,7 @@ async function placeData() {
     }
     try {
         const data = await fetchData(Info, authToken);
-        console.log(data);
-        
+
         if (!(data.data.user[0].conditionsAccepted ||data.data.user[0].usingServicesAccepted || data.data.user[0].campus)) {
             document.getElementById("app").innerHTML = `<h1 style="text-align: center; margin-top: 50px;">No Data To Display</h1>`
             return
