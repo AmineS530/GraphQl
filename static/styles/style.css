@@ -183,7 +183,7 @@
 .pp-circle {
   width: clamp(60px, 15vw, 80px);
   height: clamp(60px, 15vw, 80px);
-  background-color:#33333300;
+  background-color: #33333300;
   border-radius: 50%;
   display: flex;
   justify-content: center;
@@ -199,7 +199,7 @@
   padding: var(--container-padding);
   color: var(--white);
   font-family: Arial, sans-serif;
-  max-width: 98%;
+  max-width: 95%;
   margin: 0 auto;
 }
 
@@ -212,12 +212,13 @@
 
 /* Graphs */
 .pp-graph {
+  display: block;
   width: 100%;
   height: auto;
+  aspect-ratio: 2 / 1;
   background-color: var(--darkest-gray);
   border-radius: 3px;
   margin-top: 15px;
-  min-height: 200px;
 }
 
 /* Info box responsive */
@@ -247,7 +248,7 @@
   text-align: center;
   color: var(--light-gray);
   box-shadow: inset 0 0 5px var(--shadow-light)
-  /* box-shadow: inset 0 0 5px var(--shadow-light); */
+    /* box-shadow: inset 0 0 5px var(--shadow-light); */
 }
 
 .pp-progress-label {
@@ -469,9 +470,6 @@ body {
   min-height: 100vh;
 }
 
-html {
-  font-size: 16px;
-}
 
 /* Medium screens (tablets) */
 @media (max-width: 992px) {
@@ -483,6 +481,11 @@ html {
   .pp-box {
     flex: 1 1 100%;
     margin-bottom: 20px;
+  }
+
+  .pp-table {
+    overflow-x: auto;
+    display: block;
   }
 
   .pp-table th:nth-child(1),
@@ -516,6 +519,11 @@ html {
   .pp-info-box {
     flex: 1 1 100%;
     margin-bottom: 20px;
+  }
+
+  .pp-table {
+    overflow-x: auto;
+    display: block;
   }
 
   .pp-box {
@@ -572,6 +580,16 @@ html {
     height: 12px;
     padding: 6px;
   }
+
+  .legend-item {
+    font-size: 12px;
+  }
+
+  .legend-color {
+    width: 12px;
+    height: 12px;
+  }
+
 }
 
 /* Extra small screens (phones) */
@@ -621,18 +639,18 @@ html {
 .audit-graph-wrapper {
   width: 100%;
   max-width: 600px;
-  height: 70px;
   padding: 1rem;
   margin: 0 auto;
 }
 
 #auditLineGraph {
   width: 100%;
-  max-width: 400px;
-  height: 60px;
+  height: auto;
+  aspect-ratio: 7 / 1;
   display: block;
   margin: 0 auto;
 }
+
 
 .pie-legend {
   margin-top: 1rem;
@@ -643,6 +661,15 @@ html {
   font-family: monospace;
   font-size: 14px;
   color: #ddd;
+}
+
+#pieChart {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 6 / 5;
+  display: block;
+  max-width: 400px;
+  margin: 0 auto;
 }
 
 .legend-item {

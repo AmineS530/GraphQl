@@ -1,48 +1,3 @@
-const req = {
-    query: `
-    {
-            finished_projects: groups(
-                where: { group: { status: { _eq: finished } } }
-            ) {
-                group {
-                    path
-                    status
-                }
-            }
-            current_projects: groups(
-                where: { group: { status: { _eq: working } } }
-            ) {
-                group {
-                    path
-                    status
-                    members {
-                        userLogin
-                    }
-                }
-            }
-            setup_project: groups(
-                where: { group: { status: { _eq: setup } } }
-            ) {
-                group {
-                    path
-                    status
-                    members {
-                        userLogin
-                    }
-                }
-            }
-            skills: transactions(
-                order_by: { type: asc, amount: desc },
-                distinct_on: [type],
-                where: { _and: { type: { _like: "skill_%" } } }
-            ) {
-                type
-                amount
-            }
-        }
-    }
-    `
-};
 
 const Info = {
     query: `
@@ -107,16 +62,6 @@ const Info = {
             createdAt
             }
         }
-    skills:   user {
-    skills :transactions(
-      where: { type: { _nin: ["xp", "level", "up", "down"] } }
-      distinct_on: type
-      order_by: {type: asc, amount: desc}
-    ) {
-      name:type
-      level:amount
-    }
-  }
 }`
 };
 

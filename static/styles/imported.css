@@ -293,19 +293,18 @@ h1 {
 }
 
 .col {
-  float: right;
-  width: 35%;
+  float: left;
+  width: 60%;
   text-align: right;
 }
 
 .button {
   position: relative;
   height: 40px;
-  /* smaller height */
   padding: 0 8px;
   width: 150px;
-  /* smaller width */
-  margin: 10px 15px 20px;
+  /* margin: 5px 0px; */
+  /* margin-left: 20px; */
   text-transform: uppercase;
   display: inline-block;
   cursor: pointer;
@@ -314,9 +313,7 @@ h1 {
 .button .content {
   color: #2980b9;
   font-size: 13px;
-  /* reduced font size */
   line-height: 40px;
-  /* match the new button height */
   text-align: center;
   position: relative;
   z-index: 1;

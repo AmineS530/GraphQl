@@ -1,7 +1,7 @@
 import "../helpers/utils.js";
-import { APIS } from "../helpers/vars.js";
 import { showNotification } from "../helpers/utils.js";
 import { loadPage } from "../main.js";
+import {APIS} from "../helpers/vars.js";
 
 /* Login */
 window.login = async function login(event) {
