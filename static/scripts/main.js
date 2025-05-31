@@ -103,10 +103,6 @@ function bindFields(obj, fieldMap) {
     }
 }
 
-function Capitalize(str) {
-    return str.charAt(0).toUpperCase() + str.slice(1);
-}
-
 let sortState = {
     key: null,
     direction: 1,
@@ -126,9 +122,7 @@ async function placeData() {
         const data = await fetchData(Info, authToken);
 
         const user = data.data.user[0];
-        document.getElementById("username").textContent = `${Capitalize(
-            user.login
-        )}'s Informations`;
+        document.getElementById("username").textContent = `${String(user.login).charAt(0).toUpperCase() + String(user.login).slice(1)}'s Informations`;
         const level = data.data.level[0] || {};
         const xp = data.data.xp;
         const projects = data.data.projects?.[0];
@@ -168,7 +162,6 @@ async function placeData() {
 
         drawModuleGraph(xp.aggregate.sum.amount, filteredProjects);
     } catch (error) {
-        localStorage.removeItem("auth.jwt");
         showNotification(
             error.message || "An error occurred while fetching user data.",
             "error"
@@ -271,16 +264,10 @@ function initSort() {
 
 function updatePieChart(values, options = {}) {
     const total = values.reduce((a, b) => a + b, 0);
-    const center = options.center || [150, 150];
-    const outerRadius = options.outerRadius || 100;
-    const innerRadius = options.innerRadius || 25;
-    const colors = options.colors || [
-        "#085f63",
-        "#49beb7",
-        "#facf5a",
-        "#ff5959",
-        "#ccc",
-    ];
+    const center = 150
+    const outerRadius = 100;
+    const innerRadius =  25;
+    const colors = options.colors;
 
     const svgNS = "http://www.w3.org/2000/svg";
     const pieGroup = document.getElementById("pieSlices");
@@ -296,15 +283,15 @@ function updatePieChart(values, options = {}) {
         const percentage = ((value / total) * 100).toFixed(1);
         const label = index === 0 ? "Succeeded Audits" : `Failed Audits`;
 
-        const x0 = center[0] + outerRadius * Math.cos(startAngle);
-        const y0 = center[1] + outerRadius * Math.sin(startAngle);
-        const x1 = center[0] + outerRadius * Math.cos(endAngle);
-        const y1 = center[1] + outerRadius * Math.sin(endAngle);
+        const x0 = center + outerRadius * Math.cos(startAngle);
+        const y0 = center + outerRadius * Math.sin(startAngle);
+        const x1 = center + outerRadius * Math.cos(endAngle);
+        const y1 = center + outerRadius * Math.sin(endAngle);
 
-        const x2 = center[0] + innerRadius * Math.cos(endAngle);
-        const y2 = center[1] + innerRadius * Math.sin(endAngle);
-        const x3 = center[0] + innerRadius * Math.cos(startAngle);
-        const y3 = center[1] + innerRadius * Math.sin(startAngle);
+        const x2 = center + innerRadius * Math.cos(endAngle);
+        const y2 = center + innerRadius * Math.sin(endAngle);
+        const x3 = center + innerRadius * Math.cos(startAngle);
+        const y3 = center + innerRadius * Math.sin(startAngle);
 
         const largeArc = sliceAngle > Math.PI ? 1 : 0;
 
@@ -327,19 +314,15 @@ function updatePieChart(values, options = {}) {
             "fill-opacity: 0.8; transition: fill-opacity 0.3s; cursor: pointer;"
         );
         path.setAttribute("data-percentage", ((value / total) * 100).toFixed(1));
-        path.setAttribute("data-label", `Section ${index + 1}`);
-        path.setAttribute(
-            "title",
-            `Section ${index + 1}: ${((value / total) * 100).toFixed(1)}%`
-        );
+        path.setAttribute("data-label", `${label}`);
 
         pieGroup.appendChild(path);
 
         // Add label in the middle of the slice
         const midAngle = startAngle + sliceAngle / 2;
         const labelRadius = (outerRadius + innerRadius) / 2;
-        const labelX = center[0] + labelRadius * Math.cos(midAngle);
-        const labelY = center[1] + labelRadius * Math.sin(midAngle);
+        const labelX = center + labelRadius * Math.cos(midAngle);
+        const labelY = center + labelRadius * Math.sin(midAngle);
 
         const text = document.createElementNS(svgNS, "text");
         text.setAttribute("x", labelX);
@@ -400,9 +383,9 @@ function drawRatioLineGraph(totalUp, totalDown) {
     // Line 1 (above the bar) – XP summary
     const topText = document.createElementNS(svgNS, "text");
     topText.setAttribute("x", totalWidth / 2);
-    topText.setAttribute("y", y - 15); // above the graph
+    topText.setAttribute("y", y - 15);
     topText.setAttribute("text-anchor", "middle");
-    topText.setAttribute("fill", "#00ccff"); // cyan-like
+    topText.setAttribute("fill", "#00ccff"); 
     topText.setAttribute("font-size", "12");
     topText.textContent = `Audit XP gained: ${success}% | Audit XP lost: ${fail}%`;
     svg.appendChild(topText);
@@ -410,9 +393,9 @@ function drawRatioLineGraph(totalUp, totalDown) {
     // Line 2 (below the bar) – Ratio info
     const bottomText = document.createElementNS(svgNS, "text");
     bottomText.setAttribute("x", totalWidth / 2);
-    bottomText.setAttribute("y", y + 25); // below the graph
+    bottomText.setAttribute("y", y + 25);
     bottomText.setAttribute("text-anchor", "middle");
-    bottomText.setAttribute("fill", "#90E0EF"); // gold-ish
+    bottomText.setAttribute("fill", "#90E0EF");
     bottomText.setAttribute("font-size", "12");
     bottomText.textContent =
         totalUp > totalDown
@@ -430,10 +413,10 @@ function drawModuleGraph(currentXP, projects) {
     const width = 900;
     const height = 450;
 
-    const startDate = new Date("2024-04-18");
+    const startDate = new Date(projects[projects.length - 1].createdAt) - (10 * 24 * 60 * 60 * 1000);
     const endDate = new Date();
     const dayCount = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
-    const maxXP = Math.ceil(currentXP/1000) * 1.25;
+    const maxXP = Math.ceil(currentXP/1000) * 1.3;
 
     const leftPadding = 50;
     const rightPadding = 20;
@@ -505,7 +488,7 @@ function drawModuleGraph(currentXP, projects) {
         .slice()
         .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
         .map((p) => {
-            cumulativeXP += p.amount/1000;
+            cumulativeXP += (p.amount/1000);
             const date = new Date(p.createdAt);
             const days = (date - startDate) / (1000 * 60 * 60 * 24);
             const x = leftPadding + (days / dayCount) * graphWidth;
