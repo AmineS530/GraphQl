@@ -81,7 +81,7 @@ window.logout = function logout(event) {
 const userFieldMap = {
     fullName: "displayof_name",
     email: "displayof_email",
-    attrs: "displayof_tel",
+    phone: "displayof_tel",
     campus: "displayof_campus",
     "level.amount": "displayof_xp",
     "xp.xpAmount": "displayof_progress_text",
@@ -120,7 +120,12 @@ async function placeData() {
     }
     try {
         const data = await fetchData(Info, authToken);
-
+        console.log(data);
+        
+        if (!(data.data.user[0].conditionsAccepted ||data.data.user[0].usingServicesAccepted || data.data.user[0].campus)) {
+            document.getElementById("app").innerHTML = `<h1 style="text-align: center; margin-top: 50px;">No Data To Display</h1>`
+            return
+      }
         const user = data.data.user[0];
         document.getElementById("username").textContent = `${String(user.login).charAt(0).toUpperCase() + String(user.login).slice(1)}'s Informations`;
         const level = data.data.level[0] || {};

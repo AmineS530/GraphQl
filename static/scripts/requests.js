@@ -7,12 +7,14 @@ const Info = {
         firstName
         lastName
         email
-        attrs(path:"tel")
+        phone: attrs(path:"tel")
         campus
         totalUp
         totalDown
         totalUpBonus
         auditRatio
+        conditionsAccepted: attrs(path:"general-conditionsAccepted")
+        singServicesAccepted:attrs(path:"using-our-servicesAccepted")
     audits_succeeded: audits_aggregate(where: {closureType: {_eq: succeeded}}) {
       aggregate {
         count
