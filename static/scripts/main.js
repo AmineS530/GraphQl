@@ -24,7 +24,6 @@ export async function loadPage(page, event) {
     }
     switch (page) {
         case "home":
-            app.innerHTML = templates.profilePage;
             placeData();
             appendHeader();
             break;
@@ -118,13 +117,15 @@ async function placeData() {
         console.error("No authentication token found.");
         return;
     }
+    const app = document.getElementById("app")
     try {
         const data = await fetchData(Info, authToken);
-
-        if (!(data.data.user[0].conditionsAccepted ||data.data.user[0].usingServicesAccepted || data.data.user[0].campus)) {
-            document.getElementById("app").innerHTML = `<h1 style="text-align: center; margin-top: 50px;">No Data To Display</h1>`
+        if (!(data.data.user[0].conditionsAccepted || data.data.user[0].usingServicesAccepted || data.data.user[0].campus)) {
+            app.innerHTML = `<h1 style="text-align: center; margin-top: 50px; overflow:hidden;">No Data To Display</h1>`
             return
-      }
+        } 
+        app.innerHTML = templates.profilePage;
+
         const user = data.data.user[0];
         document.getElementById("username").textContent = `${String(user.login).charAt(0).toUpperCase() + String(user.login).slice(1)}'s Informations`;
         const level = data.data.level[0] || {};
@@ -270,7 +271,7 @@ function updatePieChart(values, options = {}) {
     const total = values.reduce((a, b) => a + b, 0);
     const center = 150
     const outerRadius = 100;
-    const innerRadius =  25;
+    const innerRadius = 25;
     const colors = options.colors;
 
     const svgNS = "http://www.w3.org/2000/svg";
@@ -355,7 +356,7 @@ function drawRatioLineGraph(totalUp, totalDown) {
     const svgNS = "http://www.w3.org/2000/svg";
     const totalWidth = 400;
     const xStart = 10;
-    const y = 30; 
+    const y = 30;
 
     const total = totalUp + totalDown;
     const success = ((totalUp / total) * 100).toFixed(1);
@@ -389,7 +390,7 @@ function drawRatioLineGraph(totalUp, totalDown) {
     topText.setAttribute("x", totalWidth / 2);
     topText.setAttribute("y", y - 15);
     topText.setAttribute("text-anchor", "middle");
-    topText.setAttribute("fill", "#00ccff"); 
+    topText.setAttribute("fill", "#00ccff");
     topText.setAttribute("font-size", "12");
     topText.textContent = `Audit XP gained: ${success}% | Audit XP lost: ${fail}%`;
     svg.appendChild(topText);
@@ -420,7 +421,7 @@ function drawModuleGraph(currentXP, projects) {
     const startDate = new Date(projects[projects.length - 1].createdAt) - (10 * 24 * 60 * 60 * 1000);
     const endDate = new Date();
     const dayCount = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
-    const maxXP = Math.ceil(currentXP/1000) * 1.3;
+    const maxXP = Math.ceil(currentXP / 1000) * 1.3;
 
     const leftPadding = 50;
     const rightPadding = 20;
@@ -492,7 +493,7 @@ function drawModuleGraph(currentXP, projects) {
         .slice()
         .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
         .map((p) => {
-            cumulativeXP += (p.amount/1000);
+            cumulativeXP += (p.amount / 1000);
             const date = new Date(p.createdAt);
             const days = (date - startDate) / (1000 * 60 * 60 * 24);
             const x = leftPadding + (days / dayCount) * graphWidth;
