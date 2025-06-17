@@ -184,19 +184,18 @@ async function renderTransactions(projectData) {
     allTransactions = transactions.map((tx) => ({
         name: tx.object?.name ?? "Unknown",
         date: tx.createdAt ?? "N/A",
-        xp: tx.amount > 0 ? `${tx.amount / 1000}Kb` : "--" ?? 0,
+        xp: `${tx.amount / 1000}Kb` ?? 0,
         members:
             tx.object?.progresses?.[0]?.group?.members
                 ?.map((m) => m.userLogin || m.login || m.username)
                 .filter(Boolean)
                 .join(", ") || "N/A",
         type:
-            tx.object?.type ??
-            (tx.amount < 1000 && tx.amount > 0
-                ? "Exam exercice"
-                : tx.amount > 1000
-                    ? "Project"
-                    : "Returned Project"),
+            (tx.amount < 500 && tx.amount > 0
+                ? "Exercice"
+                : tx.amount < 0
+                ? "Returned Project"
+                : "Project"),
     }));
     // Apply sorting if enabled
     if (sortState.key) {
