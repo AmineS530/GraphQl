@@ -158,7 +158,7 @@ async function placeData() {
         const rawTransactions = projects.transactions || [];
 
         const filteredProjects = rawTransactions
-            .filter((tx) => tx.amount > 500)
+            .filter((tx) => tx.object.type != "exercise" )
             .map((tx) => ({
                 name: tx.object?.name ?? "Unknown",
                 amount: tx.amount,

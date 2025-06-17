@@ -52,6 +52,7 @@ const Info = {
             ) {
             object {
                 name
+                type
                 progresses {
                     group {
                         members {
